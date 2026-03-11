@@ -1,0 +1,78 @@
+<?php
+// Define the error variable
+$error = "";
+
+// Check if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Retrieve form data
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
+
+    // Create a connection
+    $conn = Database::getInstance()->getConnection();
+
+    // Prepare and execute the SQL statement
+    $stmt = $conn->prepare("SELECT * FROM ims_users WHERE email = ?");
+    if ($stmt) {
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        // Check if the user exists
+        if ($result->num_rows == 1) {
+            $user = $result->fetch_assoc();
+
+            // Verify the password
+            if (password_verify($password, $user["password"])) {
+                // Set session variables
+                $_SESSION["user_id"] = $user["user_id"];
+                $_SESSION["username"] = $user["username"];
+
+                // Redirect to the index page
+                header("Location: /IM-SYSTEM/dashboard");
+                exit();
+            } else {
+                $error = "Invalid email or password.";
+            }
+        } else {
+            $error = "Invalid email or password.";
+        }
+        $stmt->close();
+    } else {
+        $error = "Database query failed.";
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login - Inventory Management System</title>
+    <?php $formStyleVersion = @filemtime(__DIR__ . '/../../public/assets/css/form.css') ?: time(); ?>
+    <link rel="stylesheet" href="/IM-SYSTEM/assets/css/form.css?v=<?php echo $formStyleVersion; ?>">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="/IM-SYSTEM/assets/img/logo.png" alt="Logo">
+        </div>
+        <h2>FEU Alabang Book Store Inventory Management System</h2>
+        <form method="POST" action="/IM-SYSTEM/login">
+            <br>
+            <label>Email:</label>
+            <input type="email" name="email" required><br>
+            <label>Password:</label>
+            <input type="password" name="password" required><br>
+            <br>
+            <input type="submit" value="Log In">
+            <?php if (!empty($error)) { ?>
+                <p class="error">
+                    <?php echo htmlspecialchars($error); ?>
+                </p>
+            <?php } ?>
+        </form>
+        <br>
+    </div>
+</body>
+</html>

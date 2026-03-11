@@ -1,0 +1,8 @@
+# Ignore configuration with database credentials
+/config/database.php
+
+# Ignore temporary files, IDE configs, etc.
+.DS_Store
+.idea/
+.vscode/
+*.log
