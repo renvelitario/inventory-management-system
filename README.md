@@ -1,4 +1,4 @@
-#Inventory Management System
+# Inventory Management System
 
 A web-based inventory management system built with PHP and MySQL that allows administrators to manage products, customers, purchases, and orders in a centralized dashboard.
 
@@ -65,9 +65,20 @@ Once the database is set up and configured, you can access the system through yo
    http://localhost/inventory-management-system
    ```
 3. You should see the login page. Since this system requires authentication, you can sign in using an existing account from the database layout or create a new one via the registration page.
-   >Demo Credentials (Admin Account)
-   >`Username: admin@admin.com
-   >Password: admin`
+
+## Demo Credentials
+
+**Admin Account**
+
+Email
+```
+admin@admin.com
+```
+
+Password
+```
+admin
+```
 
 ## Security Note
 The file config/database.php is excluded using .gitignore to prevent database credentials from being pushed to the repository.
