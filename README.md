@@ -1,6 +1,8 @@
-Inventory Management System
+#Inventory Management System
 
-A PHP-based web application for managing inventory, products, customers, and orders. This was built as a university project for an Applications and Development course.
+A web-based inventory management system built with PHP and MySQL that allows administrators to manage products, customers, purchases, and orders in a centralized dashboard.
+
+This project was developed as part of an Applications and Development course and demonstrates backend CRUD operations, authentication, and basic inventory workflow management.
 
 ## Features
 - User Authentication (Login / Register) 
@@ -22,8 +24,8 @@ To run this project locally, you need a local server environment with PHP and My
 
 First, fork the project to your own GitHub account or clone it directly to your local machine inside your web server's document root directory (e.g., `C:\xampp\htdocs` for XAMPP):
 ```bash
-git clone https://github.com/your-username/IM-SYSTEM.git
-cd IM-SYSTEM
+git clone https://github.com/renvelitario/inventory-management-system.git
+cd inventory-management-system
 ```
 
 ### 2. Database Setup
@@ -47,7 +49,7 @@ You need to configure the database credentials so the application can connect to
    <?php
    return [
        'host' => 'localhost',
-       'dbname' => 'ims_db',          // Your database name
+       'dbname' => 'ims_db',           // Your database name
        'user' => 'root',               // Your MySQL username (default for XAMPP is 'root')
        'password' => ''                // Your MySQL password (default for XAMPP is empty '')
    ];
@@ -60,12 +62,16 @@ Once the database is set up and configured, you can access the system through yo
 1. Start Apache and MySQL in your XAMPP Control Panel.
 2. Open your web browser and go to:
    ```
-   http://localhost/IM-SYSTEM/
+   http://localhost/inventory-management-system
    ```
 3. You should see the login page. Since this system requires authentication, you can sign in using an existing account from the database layout or create a new one via the registration page.
+   >Demo Credentials (Admin Account)
+   >`Username: admin@admin.com
+   >Password: admin`
 
-## Important Note on Security
-This repository includes a `.gitignore` file that deliberately ignores `config/database.php`. This ensures that your private database credentials, such as host, username, and password, are not accidentally pushed to a public repository. If you are pushing your own changes to GitHub, make sure never to commit your real `config/database.php` file.
+## Security Note
+The file config/database.php is excluded using .gitignore to prevent database credentials from being pushed to the repository.
 
 ## Developed For
 *Applications and Development Course (PHP)*
+*Date: July 2023*
