@@ -1,4 +1,4 @@
-# IM-SYSTEM (Inventory Management System)
+Inventory Management System
 
 A PHP-based web application for managing inventory, products, customers, and orders. This was built as a university project for an Applications and Development course.
 
