@@ -85,4 +85,5 @@ The file config/database.php is excluded using .gitignore to prevent database cr
 
 ## Developed For
 *Applications and Development Course (PHP)*
+
 *Date: July 2023*
