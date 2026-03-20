@@ -101,3 +101,155 @@ body {
     color: #ffffff;
     background-color: #176e2c;
 }
+
+h2,
+h3 {
+    color: #333;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 20px 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+tr:hover {
+    background-color: #fff5cd;
+    transition: background-color 0.3s ease;
+}
+
+.inactive-row td {
+    color: #8a8a8a;
+    background-color: #f3f3f3;
+}
+
+.inactive-row:hover td {
+    background-color: #ececec;
+}
+
+.search-container {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.search-container input[type="text"] {
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    margin-right: 5px;
+}
+
+.search-container .search-button,
+.edit-button {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    text-transform: uppercase;
+}
+
+.search-container .search-button:hover,
+.edit-button:hover {
+    background-color: #45a049;
+}
+
+.form-group {
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="number"],
+.form-group textarea,
+.form-group select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-group input[type="submit"] {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    text-transform: uppercase;
+    width: 40%;
+    margin-top: 10px;
+}
+
+.form-group input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+.form-container,
+.settings-container,
+.add-customer,
+.update-customer-container,
+.order-container,
+.purchase-container,
+.product-container {
+    max-width: 400px;
+    margin: 0 auto;
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.flash-message {
+    margin: 15px auto;
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.flash-success {
+    background-color: #e9f8ee;
+    border: 1px solid #73c98f;
+    color: #1a6f3b;
+}
+
+.flash-error {
+    background-color: #fbe9e9;
+    border: 1px solid #d27f7f;
+    color: #8d1f1f;
+}
+
+.flash-info {
+    background-color: #e9f2fb;
+    border: 1px solid #86add6;
+    color: #1d4f86;
+}

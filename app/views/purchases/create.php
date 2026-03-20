@@ -1,5 +1,10 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (!verify_csrf($_POST['_csrf'] ?? '')) {
+        set_flash('error', 'Invalid session token. Please try again.');
+        redirect_to('purchases');
+    }
+
     $product_id = $_POST["product_id"];
     $quantity = $_POST["quantity"];
 
@@ -23,10 +28,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $updateStmt->close();
             }
 
-            // Display the success message as an alert box
-            echo '<script>alert("Purchase added successfully.");</script>';
+            set_flash('success', 'Purchase added successfully.');
+            redirect_to('purchases');
         } else {
-            echo "Error: " . $conn->error;
+            set_flash('error', 'Failed to add purchase.');
+            redirect_to('purchases');
         }
 
         $insertStmt->close();
@@ -41,7 +47,8 @@ require __DIR__ . '/../layout/header.php';
 
 <div class="purchase-container">
     <h2>Make a Purchase</h2>
-    <form action="/IM-SYSTEM/purchases" method="POST" onsubmit="return confirm('Are you sure you want to add this purchase?');">
+    <form action="<?php echo htmlspecialchars(app_url('purchases'), ENT_QUOTES, 'UTF-8'); ?>" method="POST" onsubmit="return confirm('Are you sure you want to add this purchase?');">
+        <input type="hidden" name="_csrf" value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
         <label for="product_id">Product ID:</label>
         <select id="product_id" name="product_id" required>
             <?php

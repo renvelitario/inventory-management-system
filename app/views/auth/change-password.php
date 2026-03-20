@@ -1,10 +1,12 @@
 <?php
 $pageStyles = ['auth/change_pass.css'];
-require __DIR__ . '/../layout/header.php';
-?>
 
-<?php
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (!verify_csrf($_POST['_csrf'] ?? '')) {
+        set_flash('error', 'Invalid session token. Please try again.');
+        redirect_to('change_pass');
+    }
+
     $currentPassword = $_POST["current_password"];
     $newPassword = $_POST["new_password"];
     $confirmPassword = $_POST["confirm_password"];
@@ -34,30 +36,36 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 if ($updateStmt) {
                     $updateStmt->bind_param("si", $newHashedPassword, $userId);
                     if ($updateStmt->execute()) {
-                        // Display success message
-                        echo '<script>alert("Password changed successfully.");</script>';
+                        set_flash('success', 'Password changed successfully.');
+                        redirect_to('change_pass');
                     } else {
-                        echo "Error updating password: " . $conn->error;
+                        set_flash('error', 'Error updating password.');
+                        redirect_to('change_pass');
                     }
                     $updateStmt->close();
                 }
             } else {
-                echo '<script>alert("New password and confirm password do not match.");</script>';
+                set_flash('error', 'New password and confirm password do not match.');
+                redirect_to('change_pass');
             }
         } else {
-            echo '<script>alert("Invalid current password.");</script>';
+            set_flash('error', 'Invalid current password.');
+            redirect_to('change_pass');
         }
 
         $stmt->close();
     }
 }
+
+require __DIR__ . '/../layout/header.php';
 ?>
 
 <div class="settings-container">
     <h2>Security</h2>
     <div class="change-password">
         <h3>Change Password</h3>
-        <form action="/IM-SYSTEM/change_pass" method="POST">
+        <form action="<?php echo htmlspecialchars(app_url('change_pass'), ENT_QUOTES, 'UTF-8'); ?>" method="POST">
+            <input type="hidden" name="_csrf" value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
             <div class="form-group">
                 <label for="current_password">Current Password:</label>
                 <input type="password" id="current_password" name="current_password" required>

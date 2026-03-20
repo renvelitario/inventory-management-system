@@ -1,5 +1,10 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (!verify_csrf($_POST['_csrf'] ?? '')) {
+        set_flash('error', 'Invalid session token. Please try again.');
+        redirect_to('products_add');
+    }
+
     $product_name = $_POST["product_name"] ?? '';
     $quantity = $_POST["quantity"] ?? 0;
     $price = $_POST["price"] ?? 0.0;
@@ -17,12 +22,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         
         // Validate input
         if ($quantity < 0 || $price < 0) {
-            echo '<script>alert("Quantity and price cannot be negative.");</script>';
+            set_flash('error', 'Quantity and price cannot be negative.');
+            redirect_to('products_add');
         } elseif ($stmt->execute()) {
-            // Display the success message as an alert box
-            echo '<script>alert("Product added successfully.");</script>';
+            set_flash('success', 'Product added successfully.');
+            redirect_to('products_add');
         } else {
-            echo "Error: " . $conn->error;
+            set_flash('error', 'Failed to add product.');
+            redirect_to('products_add');
         }
 
         $stmt->close();
@@ -37,7 +44,8 @@ require __DIR__ . '/../layout/header.php';
 
 <div class="product-container">
     <h2>Add a Product</h2>
-    <form action="/IM-SYSTEM/products_add" method="POST">
+    <form action="<?php echo htmlspecialchars(app_url('products_add'), ENT_QUOTES, 'UTF-8'); ?>" method="POST">
+        <input type="hidden" name="_csrf" value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
         <label for="product_name">Product Name:</label>
         <input type="text" id="product_name" name="product_name" required>
 

@@ -1,5 +1,10 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (!verify_csrf($_POST['_csrf'] ?? '')) {
+        set_flash('error', 'Invalid session token. Please try again.');
+        redirect_to('orders');
+    }
+
     $product_id = $_POST["product_id"];
     $customer_id = $_POST["customer_id"];
     $quantity = $_POST["quantity"];
@@ -19,9 +24,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $productStatus = strtolower(trim((string) $row["status"]));
 
             if ($productStatus !== "active") {
-                echo '<script>alert("Cannot order inactive product.");</script>';
+                set_flash('error', 'Cannot order inactive product.');
+                redirect_to('orders');
             } elseif (!is_numeric($quantity) || (int) $quantity <= 0) {
-                echo '<script>alert("Please enter a valid quantity greater than 0.");</script>';
+                set_flash('error', 'Please enter a valid quantity greater than 0.');
+                redirect_to('orders');
             } elseif ((int) $quantity <= (int) $availableQuantity) {
                 // Prepare the SQL statement with placeholders
                 $insertSql = "INSERT INTO ims_orders (product_id, customer_id, quantity) VALUES (?, ?, ?)";
@@ -41,20 +48,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             $updateStmt->close();
                         }
 
-                        // Display the success message as an alert box
-                        echo '<script>alert("Order added successfully.");</script>';
+                        set_flash('success', 'Order added successfully.');
+                        redirect_to('orders');
                     } else {
-                        echo "Error: " . $conn->error;
+                        set_flash('error', 'Failed to add order.');
+                        redirect_to('orders');
                     }
 
                     $stmt->close();
                 }
             } else {
-                // Display an error message as an alert box
-                echo '<script>alert("Insufficient quantity. Available: ' . htmlspecialchars($availableQuantity) . '");</script>';
+                set_flash('error', 'Insufficient quantity. Available: ' . (string) $availableQuantity);
+                redirect_to('orders');
             }
         } else {
-            echo "Error: Product not found.";
+            set_flash('error', 'Product not found.');
+            redirect_to('orders');
         }
 
         $checkStmt->close();
@@ -69,7 +78,8 @@ require __DIR__ . '/../layout/header.php';
 
 <div class="order-container">
     <h2>Make an Order</h2>
-    <form action="/IM-SYSTEM/orders" method="POST" onsubmit="return confirm('Are you sure you want to add this order?');">
+    <form action="<?php echo htmlspecialchars(app_url('orders'), ENT_QUOTES, 'UTF-8'); ?>" method="POST" onsubmit="return confirm('Are you sure you want to add this order?');">
+        <input type="hidden" name="_csrf" value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
         <label for="product_id">Product ID:</label>
         <select id="product_id" name="product_id" required>
             <?php

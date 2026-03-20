@@ -1,8 +1,24 @@
 <?php
 session_start();
 
+require_once __DIR__ . '/../config/env.php';
+loadEnv(__DIR__ . '/../.env');
+
+$debugEnabled = strtolower((string) env('APP_DEBUG', 'false')) === 'true';
+if ($debugEnabled) {
+    ini_set('display_errors', '1');
+    error_reporting(E_ALL);
+} else {
+    ini_set('display_errors', '0');
+}
+
+$appName = env('APP_NAME', 'Inventory Management System');
+
 // Autoload core classes
 require_once __DIR__ . '/../src/Database.php';
+
+// Get database connection
+$conn = Database::getInstance()->getConnection();
 
 // Parse route
 $route = $_GET['route'] ?? 'index';
@@ -21,35 +37,31 @@ if ($route === 'index' || $route === '') {
 // Basic Authentication check
 $publicRoutes = ['login', 'register'];
 if (!isset($_SESSION['user_id']) && !in_array($route, $publicRoutes)) {
-    header("Location: /IM-SYSTEM/login");
+    header('Location: ' . app_url('login'));
     exit();
 }
 
-// Map routes to files (Controllers or Views)
+// Map routes to view files
 $routes = [
-    'login' => '../views/auth/login.php',
-    'logout' => '../views/auth/logout.php',
-    'register' => '../views/auth/register.php',
-    'dashboard' => '../views/dashboard.php',
-    'products_list' => '../views/products/products_list.php',
-    'products_add' => '../views/products/products_add.php',
-    'products_update' => '../views/products/products_update.php',
-    'products_update_process' => '../views/products/products_update_process.php',
-    'cust_list' => '../views/customers/cust_list.php',
-    'cust_add' => '../views/customers/cust_add.php',
-    'cust_update' => '../views/customers/cust_update.php',
-    'cust_update_process' => '../views/customers/cust_update_process.php',
-    'purchases' => '../views/purchases/purchases.php',
-    'purchases_list' => '../views/purchases/purchases_list.php',
-    'orders' => '../views/orders/orders.php',
-    'orders_list' => '../views/orders/orders_list.php',
-    'settings' => '../views/auth/settings.php',
-    'change_pass' => '../views/auth/change_pass.php',
-    'edit_profile' => '../views/auth/edit_profile.php'
+    'login' => '../app/views/auth/login.php',
+    'logout' => '../app/views/auth/logout.php',
+    'register' => '../app/views/auth/register.php',
+    'dashboard' => '../app/views/dashboard.php',
+    'products_list' => '../app/views/products/index.php',
+    'products_add' => '../app/views/products/create.php',
+    'products_update' => '../app/views/products/edit.php',
+    'products_update_process' => '../app/views/products/update.php',
+    'cust_list' => '../app/views/customers/index.php',
+    'cust_add' => '../app/views/customers/create.php',
+    'cust_update' => '../app/views/customers/edit.php',
+    'cust_update_process' => '../app/views/customers/update.php',
+    'purchases' => '../app/views/purchases/create.php',
+    'purchases_list' => '../app/views/purchases/index.php',
+    'orders' => '../app/views/orders/create.php',
+    'orders_list' => '../app/views/orders/index.php',
+    'settings' => '../app/views/auth/settings.php',
+    'change_pass' => '../app/views/auth/change-password.php'
 ];
-
-// Determine base path for HTML links
-$basePath = '/IM-SYSTEM/';
 
 if (array_key_exists($route, $routes)) {
     require $routes[$route];

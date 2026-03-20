@@ -26,7 +26,8 @@ require __DIR__ . '/../layout/header.php';
             if ($product) {
                 // Display the edit form with pre-filled data
                 ?>
-                <form method="POST" action="/IM-SYSTEM/products_update_process" class="update-form">
+                <form method="POST" action="<?php echo htmlspecialchars(app_url('products_update_process'), ENT_QUOTES, 'UTF-8'); ?>" class="update-form">
+                    <input type="hidden" name="_csrf" value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
                     <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['product_id']); ?>">
                     <label>Product Name:</label>
                     <input type="text" name="product_name" value="<?php echo htmlspecialchars($product['product_name']); ?>" required><br><br>

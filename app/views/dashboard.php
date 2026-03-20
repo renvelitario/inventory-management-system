@@ -62,59 +62,48 @@ require __DIR__ . '/layout/header.php';
     $result = $conn->query($sql);
     $totalCustomers = $result->fetch_assoc()["total_customers"];
 
-    // Total Purchases
-    $sql = "SELECT COUNT(*) AS total_purchases FROM ims_purchases";
-    $result = $conn->query($sql);
-    $totalPurchases = $result->fetch_assoc()["total_purchases"];
-
     // Total Orders
     $sql = "SELECT COUNT(*) AS total_orders FROM ims_orders";
     $result = $conn->query($sql);
     $totalOrders = $result->fetch_assoc()["total_orders"];
 
-    // Fetch all users
-    $sql = "SELECT * FROM ims_users";
-    $resultUsers = $conn->query($sql);
+    // Total Purchases
+    $sql = "SELECT COUNT(*) AS total_purch FROM ims_purchases";
+    $result = $conn->query($sql);
+    $totalPurchases = $result->fetch_assoc()["total_purch"];
+
+    // User list
+    $sqlUsers = "SELECT user_id, email, username, acc_type, status FROM ims_users ORDER BY user_id ASC";
+    $resultUsers = $conn->query($sqlUsers);
     ?>
 
     <div class="row-container">
         <div class="statistic-box">
-            <h4>Total Products</h4>
-            <p>
-                <?php echo $totalProducts; ?>
-            </p>
+            <h3>Total Products</h3>
+            <p><?php echo htmlspecialchars($totalProducts); ?></p>
         </div>
         <div class="statistic-box">
-            <h4>Low Stock Products</h4>
-            <p>
-                <?php echo $lowStockProducts; ?>
-            </p>
+            <h3>Low Stock Products</h3>
+            <p><?php echo htmlspecialchars($lowStockProducts); ?></p>
         </div>
         <div class="statistic-box">
-            <h4>Out of Stock Products</h4>
-            <p>
-                <?php echo $outOfStockProducts; ?>
-            </p>
+            <h3>Out of Stock Products</h3>
+            <p><?php echo htmlspecialchars($outOfStockProducts); ?></p>
         </div>
     </div>
+
     <div class="row-container">
         <div class="statistic-box">
-            <h4>Total Customers</h4>
-            <p>
-                <?php echo $totalCustomers; ?>
-            </p>
+            <h3>Total Customers</h3>
+            <p><?php echo htmlspecialchars($totalCustomers); ?></p>
         </div>
         <div class="statistic-box">
-            <h4>Total Purchases</h4>
-            <p>
-                <?php echo $totalPurchases; ?>
-            </p>
+            <h3>Total Orders</h3>
+            <p><?php echo htmlspecialchars($totalOrders); ?></p>
         </div>
         <div class="statistic-box">
-            <h4>Total Orders</h4>
-            <p>
-                <?php echo $totalOrders; ?>
-            </p>
+            <h3>Total Purchases</h3>
+            <p><?php echo htmlspecialchars($totalPurchases); ?></p>
         </div>
     </div>
 
@@ -154,5 +143,4 @@ require __DIR__ . '/layout/header.php';
 </div>
 
 </body>
-
 </html>
