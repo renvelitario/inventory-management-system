@@ -76,3 +76,29 @@ p {
 .logo img {
     max-width: 200px;
 }
+
+.flash-message {
+    margin: 10px 0 15px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.flash-success {
+    background-color: #e9f8ee;
+    border: 1px solid #73c98f;
+    color: #1a6f3b;
+}
+
+.flash-error {
+    background-color: #fbe9e9;
+    border: 1px solid #d27f7f;
+    color: #8d1f1f;
+}
+
+.flash-info {
+    background-color: #e9f2fb;
+    border: 1px solid #86add6;
+    color: #1d4f86;
+}

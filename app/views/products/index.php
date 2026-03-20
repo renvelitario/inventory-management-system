@@ -38,7 +38,7 @@ require __DIR__ . '/../layout/header.php';
                     echo "<td>" . htmlspecialchars($row["quantity"]) . "</td>";
                     echo "<td>" . htmlspecialchars($row["price"]) . "</td>";
                     echo "<td>" . htmlspecialchars($row["status"]) . "</td>";
-                    echo "<td><button class='edit-button' onclick='location.href=\"/IM-SYSTEM/products_update?product_id=" . htmlspecialchars($row["product_id"]) . "\"'>Edit</button></td>";
+                    echo "<td><button class='edit-button' onclick='location.href=\"" . htmlspecialchars(app_url('products_update?product_id=' . (string) $row["product_id"]), ENT_QUOTES, 'UTF-8') . "\"'>Edit</button></td>";
                     echo "</tr>";
                 }
             } else {
@@ -77,9 +77,6 @@ require __DIR__ . '/../layout/header.php';
                 rows[i].style.display = "none";
             }
         }
-
-        var headerRow = table.getElementsByTagName("thead")[0].getElementsByTagName("tr")[0];
-        headerRow.style.display = showHeader ? "" : "none"; // Show/hide the header based on showHeader value
     }
 </script>
 

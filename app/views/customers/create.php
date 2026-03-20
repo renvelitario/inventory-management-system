@@ -1,5 +1,10 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (!verify_csrf($_POST['_csrf'] ?? '')) {
+        set_flash('error', 'Invalid session token. Please try again.');
+        redirect_to('cust_add');
+    }
+
     $name = $_POST["name"] ?? '';
     $address = $_POST["address"] ?? '';
     $contact_no = $_POST["contact_no"] ?? '';
@@ -16,10 +21,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         
         // Execute the prepared statement
         if ($stmt->execute()) {
-            // Display the success message as an alert box
-            echo '<script>alert("Customer added successfully.");</script>';
+            set_flash('success', 'Customer added successfully.');
+            redirect_to('cust_add');
         } else {
-            echo "Error: " . $stmt->error;
+            set_flash('error', 'Failed to add customer.');
+            redirect_to('cust_add');
         }
 
         $stmt->close();
@@ -34,7 +40,8 @@ require __DIR__ . '/../layout/header.php';
 
 <div class="add-customer">
     <h2>Add a Customer</h2>
-    <form action="/IM-SYSTEM/cust_add" method="POST">
+    <form action="<?php echo htmlspecialchars(app_url('cust_add'), ENT_QUOTES, 'UTF-8'); ?>" method="POST">
+        <input type="hidden" name="_csrf" value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required><br>
 

@@ -26,7 +26,8 @@ require __DIR__ . '/../layout/header.php';
             if ($customer) {
                 // Display the edit form with pre-filled data
                 ?>
-                <form method="POST" action="/IM-SYSTEM/cust_update_process" class="update-customer-form">
+                <form method="POST" action="<?php echo htmlspecialchars(app_url('cust_update_process'), ENT_QUOTES, 'UTF-8'); ?>" class="update-customer-form">
+                    <input type="hidden" name="_csrf" value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
                     <input type="hidden" name="cust_id" value="<?php echo htmlspecialchars($customer['cust_id']); ?>">
                     <div class="form-group">
                         <label for="name">Name:</label>

@@ -8,5 +8,5 @@ session_unset();
 session_destroy();
 
 // Redirect to the login page
-header("Location: /IM-SYSTEM/login");
+header('Location: ' . app_url('login'));
 exit();

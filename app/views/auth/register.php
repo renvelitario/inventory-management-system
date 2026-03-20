@@ -1,11 +1,13 @@
 <?php
 $pageStyles = ['auth/register.css'];
-require __DIR__ . '/../layout/header.php';
-?>
 
-<?php
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (!verify_csrf($_POST['_csrf'] ?? '')) {
+        set_flash('error', 'Invalid session token. Please try again.');
+        redirect_to('register');
+    }
+
     // Retrieve form data
     $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
@@ -16,7 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Check if the passwords match
     if ($password !== $confirmPassword) {
-        echo '<script>alert("Passwords do not match.");</script>';
+        set_flash('error', 'Passwords do not match.');
+        redirect_to('register');
     } else {
         // Create a connection
         $conn = Database::getInstance()->getConnection();
@@ -31,7 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($count > 0) {
                 // Display an error message if the email already exists
-                echo '<script>alert("Email already exists.");</script>';
+                set_flash('error', 'Email already exists.');
+                redirect_to('register');
             } else {
                 // Hash the password
                 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
@@ -43,10 +47,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     if ($insertUserStmt->execute()) {
                         // Display a success message if registration is successful
-                        echo '<script>alert("Account added successfully.");</script>';
+                        set_flash('success', 'Account added successfully.');
+                        redirect_to('register');
                     } else {
                         // Display an error message if an error occurred during registration
-                        echo '<script>alert("Error occurred during registration.");</script>';
+                        set_flash('error', 'Error occurred during registration.');
+                        redirect_to('register');
                     }
                     $insertUserStmt->close();
                 }
@@ -55,11 +61,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
+
+require __DIR__ . '/../layout/header.php';
 ?>
 
 <div class="form-container">
     <h2>Add a New User</h2>
-    <form method="POST" action="/IM-SYSTEM/register">
+    <form method="POST" action="<?php echo htmlspecialchars(app_url('register'), ENT_QUOTES, 'UTF-8'); ?>">
+        <input type="hidden" name="_csrf" value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
         <div class="form-group">
             <label>Email:</label>
             <input type="email" name="email" required>

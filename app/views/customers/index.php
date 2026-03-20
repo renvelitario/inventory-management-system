@@ -34,7 +34,7 @@ require __DIR__ . '/../layout/header.php';
                     echo "<td>" . htmlspecialchars($row["name"]) . "</td>";
                     echo "<td>" . htmlspecialchars($row["address"]) . "</td>";
                     echo "<td>" . htmlspecialchars($row["contact_no"]) . "</td>";
-                    echo "<td><a href='/IM-SYSTEM/cust_update?cust_id=" . htmlspecialchars($row["cust_id"]) . "' class='edit-button'>Edit</a></td>";
+                    echo "<td><a href='" . htmlspecialchars(app_url('cust_update?cust_id=' . (string) $row["cust_id"]), ENT_QUOTES, 'UTF-8') . "' class='edit-button'>Edit</a></td>";
                     echo "</tr>";
                 }
             } else {
