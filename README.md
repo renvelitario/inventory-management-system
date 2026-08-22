@@ -94,6 +94,3 @@ This repository includes a `.gitignore` file that ignores sensitive configuratio
 *Applications and Development Course (PHP)*
 
 *Date: July 2023*
-
-*Date: July 2023*
-
